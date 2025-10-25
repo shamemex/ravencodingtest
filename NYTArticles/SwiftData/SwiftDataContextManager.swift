@@ -14,7 +14,7 @@ final class SwiftDataContextManager {
     
     private init() {
         do {
-            container = try ModelContainer(for: ViewedArticle.self, configurations: ModelConfiguration(isStoredInMemoryOnly: false))
+            container = try ModelContainer(for: Article.self, configurations: ModelConfiguration(isStoredInMemoryOnly: false))
             
             if let container {
                 context = ModelContext(container)

@@ -1,23 +1,16 @@
 //
-//  ContentView.swift
+//  ArticlesListView.swift
 //  NYTArticles
 //
 //  Created by Emmanuel Martínez on 24/10/25.
 //
 
 import SwiftUI
-import SwiftData
 
-struct ContentView: View {
-    @StateObject private var viewModel = ViewedArticlesViewModel(
-        localDataSource: ArticlesLocalDataSource(
-            container: SwiftDataContextManager.shared.container,
-            context: SwiftDataContextManager.shared.context
-        ),
-        remoteDataSource: ViewedArticlesService()
-    )
-    @State var loadingError = false
-    @State var isLoading = true
+struct ArticlesListView<ViewModel>: View where ViewModel: ArticlesListViewModelProtocol {
+    @StateObject var viewModel: ViewModel
+    @State private var loadingError = false
+    @State private var isLoading = true
 
     var body: some View {
         ZStack {
@@ -25,9 +18,9 @@ struct ContentView: View {
                 List {
                     ForEach(viewModel.articles) { article in
                         NavigationLink {
-                            ViewedArticleListItemView(article: article)
+                            ArticleListItemView(article: article)
                         } label: {
-                            ViewedArticleListItemView(article: article)
+                            ArticleListItemView(article: article)
                         }
                     }
                 }
@@ -57,5 +50,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ArticlesListView(
+        viewModel: ViewedArticlesViewModelMock()
+    )
 }

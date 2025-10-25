@@ -1,19 +1,24 @@
 //
-//  ViewedArticlesViewModel.swift
+//  ArticlesListViewModel.swift
 //  NYTArticles
 //
 //  Created by Emmanuel Martínez on 24/10/25.
 //
 import SwiftUI
 
-class ViewedArticlesViewModel: ObservableObject {
+protocol ArticlesListViewModelProtocol: ObservableObject {
+    var articles: [Article] { get set }
+    func fetchArticles() async throws
+}
+
+class ArticlesListViewModel: ArticlesListViewModelProtocol {
     private let localDataSource: ArticlesLocalDataSource
-    private let remoteDataSource: ViewedArticlesService
-    @Published var articles: [ViewedArticle] = [ViewedArticle]()
+    private let remoteDataSource: ArticlesService
+    @Published var articles: [Article] = [Article]()
     
     init(
         localDataSource: ArticlesLocalDataSource,
-        remoteDataSource: ViewedArticlesService
+        remoteDataSource: ArticlesService
     ) {
         self.localDataSource = localDataSource
         self.remoteDataSource = remoteDataSource
@@ -23,8 +28,8 @@ class ViewedArticlesViewModel: ObservableObject {
     func fetchArticles() async throws {
         localDataSource.deleteOlder()
         let localArticles = localDataSource.fetch()
-        var remoteArticles: [ViewedArticle] = []
-        var mergedArticles: Set<ViewedArticle>
+        var remoteArticles: [Article] = []
+        var mergedArticles: Set<Article>
         do {
             remoteArticles = try await fetchRemoteArticles()
             
@@ -41,7 +46,15 @@ class ViewedArticlesViewModel: ObservableObject {
     }
     
     @MainActor
-    func fetchRemoteArticles() async throws -> [ViewedArticle] {
-        try await remoteDataSource.fetchViewedArticles()
+    func fetchRemoteArticles() async throws -> [Article] {
+        try await remoteDataSource.fetchArticles()
+    }
+}
+
+class ViewedArticlesViewModelMock: ArticlesListViewModelProtocol {
+    @Published var articles: [Article] = [Article]()
+    
+    func fetchArticles() async throws {
+        articles = [Article.exampleArticle]
     }
 }

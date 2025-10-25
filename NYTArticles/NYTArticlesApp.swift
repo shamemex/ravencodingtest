@@ -6,13 +6,20 @@
 //
 
 import SwiftUI
-import SwiftData
 
 @main
 struct NYTArticlesApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ArticlesListView(
+                viewModel: ArticlesListViewModel(
+                    localDataSource: ArticlesLocalDataSource(
+                        container: SwiftDataContextManager.shared.container,
+                        context: SwiftDataContextManager.shared.context
+                    ),
+                    remoteDataSource: ArticlesService()
+                )
+            )
         }
     }
 }

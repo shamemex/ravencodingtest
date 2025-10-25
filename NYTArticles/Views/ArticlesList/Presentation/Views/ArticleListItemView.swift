@@ -1,5 +1,5 @@
 //
-//  ViewedArticleListItemView.swift
+//  ArticleListItemView.swift
 //  NYTArticles
 //
 //  Created by Emmanuel Martínez on 24/10/25.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct ViewedArticleListItemView: View {
-    var article: ViewedArticle
+struct ArticleListItemView: View {
+    var article: Article
     var body: some View {
         VStack(alignment: .leading) {
             Text(article.title)
@@ -25,5 +25,5 @@ struct ViewedArticleListItemView: View {
 }
 
 #Preview {
-    ViewedArticleListItemView(article: ViewedArticle.exampleArticle)
+    ArticleListItemView(article: Article.exampleArticle)
 }
