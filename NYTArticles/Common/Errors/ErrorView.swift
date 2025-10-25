@@ -19,12 +19,7 @@ struct ErrorView: View {
                 .font(.title2)
                 .multilineTextAlignment(.center)
                 .padding()
-            Button {
-                
-            } label: {
-                Text("Retry")
-            }
-            .buttonStyle(.borderedProminent)
+            Text("Pull to retry")
         }
         .padding()
     }

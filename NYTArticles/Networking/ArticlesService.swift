@@ -27,7 +27,7 @@ class ArticlesService {
             
             return remoteArticles
         } catch {
-            print("Error while retrieving products: \(error.localizedDescription)")
+            print("Error while retrieving articles: \(error.localizedDescription)")
             throw FetchError.badJSON
         }
     }
