@@ -11,11 +11,16 @@ struct ArticlesListView<ViewModel>: View where ViewModel: ArticlesListViewModelP
     @StateObject var viewModel: ViewModel
     @State private var loadingError = false
     @State private var isLoading = true
+    @State private var isShowingBanner = false
 
     var body: some View {
         ZStack {
             NavigationSplitView {
                 List {
+                    if isShowingBanner {
+                        BannerView(isShowingBanner: $isShowingBanner)
+                            .transition(.slide)
+                    }
                     ForEach(viewModel.articles) { article in
                         NavigationLink {
                             ArticleListItemView(article: article)
@@ -25,17 +30,14 @@ struct ArticlesListView<ViewModel>: View where ViewModel: ArticlesListViewModelP
                     }
                 }
                 .navigationTitle("Most Viewed Articles")
+                .refreshable {
+                    await fetchArticles()
+                }
             } detail: {
                 Text("Select an item")
             }
             .task {
-                do {
-                    try await viewModel.fetchArticles()
-                    isLoading = false
-                } catch {
-                    self.loadingError = true
-                    isLoading = false
-                }
+                await fetchArticles()
             }
             
             if loadingError && viewModel.articles.isEmpty {
@@ -45,6 +47,26 @@ struct ArticlesListView<ViewModel>: View where ViewModel: ArticlesListViewModelP
             if isLoading {
                 ProgressView()
             }
+        }
+    }
+    
+    func showBanner() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            withAnimation {
+                isShowingBanner = false
+            }
+        }
+    }
+    
+    func fetchArticles() async {
+        do {
+            try await viewModel.fetchArticles()
+            isLoading = false
+        } catch {
+            loadingError = true
+            showBanner()
+            isShowingBanner = true
+            isLoading = false
         }
     }
 }
