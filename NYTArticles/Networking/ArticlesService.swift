@@ -1,16 +1,16 @@
 //
-//  ViewedArticlesService.swift
+//  ArticlesService.swift
 //  NYTArticles
 //
 //  Created by Emmanuel Martínez on 24/10/25.
 //
 import SwiftUI
 
-class ViewedArticlesService {
-    private var apiResponse: ViewedArticlesResponse?
+class ArticlesService {
+    private var apiResponse: ArticlesResponse?
     
     @MainActor
-    func fetchViewedArticles() async throws -> [ViewedArticle] {
+    func fetchArticles() async throws -> [Article] {
         let apiConfig = getConfiguration()
         let baseURL = apiConfig[Constants.Networking.baseURLKey] ?? ""
         let apiKey = apiConfig[Constants.Networking.apiKeyName] ?? ""
@@ -22,7 +22,7 @@ class ViewedArticlesService {
         guard (response as? HTTPURLResponse)?.statusCode == Constants.Networking.okStatusCode else { throw FetchError.badRequest }
         
         do {
-            let apiResponse = try JSONDecoder().decode(ViewedArticlesResponse.self, from: data)
+            let apiResponse = try JSONDecoder().decode(ArticlesResponse.self, from: data)
             let remoteArticles = apiResponse.results
             
             return remoteArticles

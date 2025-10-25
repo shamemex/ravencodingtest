@@ -1,5 +1,5 @@
 //
-//  ViewedArticles.swift
+//  Articles.swift
 //  NYTArticles
 //
 //  Created by Emmanuel Martínez on 24/10/25.
@@ -7,11 +7,11 @@
 import Foundation
 import SwiftData
 
-struct ViewedArticlesResponse: Decodable {
+struct ArticlesResponse: Decodable {
     let status: String
     let copyright: String
     let numResults: Int
-    let results: [ViewedArticle]
+    let results: [Article]
     
     private enum CodingKeys: String, CodingKey {
         case status = "status"
@@ -22,7 +22,7 @@ struct ViewedArticlesResponse: Decodable {
 }
 
 @Model
-final class ViewedArticle: Decodable, Identifiable, Hashable {
+final class Article: Decodable, Identifiable, Hashable {
     @Attribute(.unique) var id: Int
     var title: String
     var byline: String
@@ -68,11 +68,11 @@ final class ViewedArticle: Decodable, Identifiable, Hashable {
         case abstract = "abstract"
     }
     
-    static func ==(lhs: ViewedArticle, rhs: ViewedArticle) -> Bool {
+    static func ==(lhs: Article, rhs: Article) -> Bool {
         lhs.id == rhs.id
     }
     
-    static let exampleArticle = ViewedArticle(
+    static let exampleArticle = Article(
         id: 1,
         title: "The White House Wrecking Ball",
         byline: "By Jess Bidgood",
