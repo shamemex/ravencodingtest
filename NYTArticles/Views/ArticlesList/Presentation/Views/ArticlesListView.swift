@@ -17,13 +17,13 @@ struct ArticlesListView<ViewModel>: View where ViewModel: ArticlesListViewModelP
         ZStack {
             NavigationSplitView {
                 List {
-                    if isShowingBanner {
+                    if isShowingBanner && !viewModel.articles.isEmpty {
                         BannerView(isShowingBanner: $isShowingBanner)
                             .transition(.slide)
                     }
                     ForEach(viewModel.articles) { article in
                         NavigationLink {
-                            ArticleListItemView(article: article)
+                            ArticleDetailView(article: article)
                         } label: {
                             ArticleListItemView(article: article)
                         }
